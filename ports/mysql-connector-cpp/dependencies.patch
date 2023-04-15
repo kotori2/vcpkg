@@ -1,13 +1,18 @@
 ﻿diff --git a/cdk/cmake/DepFindCompression.cmake b/cdk/cmake/DepFindCompression.cmake
-index f9fe519f..d3a1c832 100644
+index f9fe519f..651b06d6 100644
 --- a/cdk/cmake/DepFindCompression.cmake
 +++ b/cdk/cmake/DepFindCompression.cmake
-@@ -48,7 +48,7 @@ message(STATUS "Setting up compression libraries.")
+@@ -48,7 +48,12 @@ message(STATUS "Setting up compression libraries.")
  #######
  # ZLIB
  #
 -add_ext(zlib zlib.h z ext_zlib)
-+add_ext(zlib zlib.h zlib ext_zlib)
++if (WIN32)
++  set(ZLIB_NAME zlib)
++else()
++  set(ZLIB_NAME zlib)
++endif()
++add_ext(zlib zlib.h ${ZLIB_NAME} ext_zlib)
  if(NOT ZLIB_FOUND)
    message(FATAL_ERROR "Can't build without zlib support")
  endif()
