@@ -1,0 +1,26 @@
+diff --git a/src/core/ext/filters/http/client/http_client_filter.cc b/src/core/ext/filters/http/client/http_client_filter.cc
+index c17f76dbe1..04c0c8f53d 100644
+--- a/src/core/ext/filters/http/client/http_client_filter.cc
++++ b/src/core/ext/filters/http/client/http_client_filter.cc
+@@ -97,8 +97,6 @@ Slice UserAgentFromArgs(const ChannelArgs& args, const char* transport_name) {
+   };
+ 
+   add(args.GetString(GRPC_ARG_PRIMARY_USER_AGENT_STRING).value_or(""));
+-  add(absl::StrFormat("grpc-c/%s (%s; %s)", grpc_version_string(),
+-                      GPR_PLATFORM_STRING, transport_name));
+   add(args.GetString(GRPC_ARG_SECONDARY_USER_AGENT_STRING).value_or(""));
+ 
+   return Slice::FromCopiedString(absl::StrJoin(fields, " "));
+diff --git a/src/cpp/common/channel_arguments.cc b/src/cpp/common/channel_arguments.cc
+index 60ccbfb820..61e2b8e3bb 100644
+--- a/src/cpp/common/channel_arguments.cc
++++ b/src/cpp/common/channel_arguments.cc
+@@ -131,7 +131,7 @@ void ChannelArguments::SetUserAgentPrefix(
+     if (arg.type == GRPC_ARG_STRING) {
+       if (std::string(arg.key) == GRPC_ARG_PRIMARY_USER_AGENT_STRING) {
+         GPR_ASSERT(arg.value.string == strings_it->c_str());
+-        *(strings_it) = user_agent_prefix + " " + arg.value.string;
++        *(strings_it) = user_agent_prefix;
+         arg.value.string = const_cast<char*>(strings_it->c_str());
+         replaced = true;
+         break;
